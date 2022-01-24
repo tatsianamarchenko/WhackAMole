@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+  @ObservedObject var viewModel: WhackAMoleViewModel
   @State var show = false
   var body: some View {
     ZStack {
@@ -22,11 +23,11 @@ struct ContentView: View {
             .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
 
           LazyVGrid(columns: [GridItem(.adaptive(minimum: 110))], content: {
-            ForEach(0 ..< 9) { item in
-              GameElement(show: $show)
+            ForEach(viewModel.gameArray) {item in
+              GameElement(card: item)
 
                 .onTapGesture {
-                  show.toggle()
+                  viewModel.changeScore(item)
                 }
             }
           })
@@ -47,7 +48,7 @@ struct ContentView: View {
               .padding()
             HStack {
               Button {
-                //
+              //
               } label: {
                 Image(systemName: "restart.circle.fill")
                   .resizable()
@@ -74,18 +75,10 @@ struct ContentView: View {
   }
 }
 
-let screen = UIScreen.main.bounds
-
-struct ContentView_Previews: PreviewProvider {
-  static var previews: some View {
-    ContentView()
-  }
-}
-
 struct GameElement: View {
   var width = CGFloat(80)
   var height = CGFloat(80)
-  @Binding var show : Bool
+  var card : WhackAMoleModel.SingleHole
   var body: some View {
     let multiplier = width / 44
     let progress : Double = Double((100 - 90)) * 0.01
@@ -95,7 +88,7 @@ struct GameElement: View {
         .stroke(LinearGradient(gradient: Gradient(colors: [.gray.opacity(0.1), .black.opacity(0.3)]), startPoint: .leading, endPoint: .trailing), style: StrokeStyle(lineWidth: 3.5 * multiplier, lineJoin: .round))
 
       Circle()
-        .trim(from: show ? progress : 1, to: 1)
+        .trim(from: card.show ? progress : 1, to: 1)
         .stroke(LinearGradient(gradient: Gradient(colors: [.indigo, .pink]), startPoint: .leading, endPoint: .trailing), style: StrokeStyle(lineWidth: 3.5 * multiplier, lineJoin: .round))
         .rotationEffect(Angle(degrees: 90))
         .rotation3DEffect(Angle(degrees: 180), axis: (x: 1, y: 0, z: 0))
@@ -106,9 +99,17 @@ struct GameElement: View {
         .aspectRatio(contentMode: .fill)
         .shadow(color: .green, radius: 3, x: 3, y: 3)
         .padding(8)
-        .offset(y: show ? -30 : 0).animation(.easeInOut, value: show)
+        .offset(y: card.show ? -70 : 0).animation(.easeInOut, value: card.show)
     }.padding(.vertical, 3)
       .rotation3DEffect(Angle(degrees: -300), axis: (x: 10, y: 0, z: 0),  perspective: 0.8)
       .frame(width: 100, height: 100)
+  }
+}
+
+let screen = UIScreen.main.bounds
+
+struct ContentView_Previews: PreviewProvider {
+  static var previews: some View {
+    ContentView(viewModel: WhackAMoleViewModel())
   }
 }

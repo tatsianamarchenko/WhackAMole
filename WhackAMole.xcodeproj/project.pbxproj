@@ -11,6 +11,8 @@
 		BF3DFF74279E9BBC00FAF01E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3DFF73279E9BBC00FAF01E /* ContentView.swift */; };
 		BF3DFF76279E9BBE00FAF01E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF3DFF75279E9BBE00FAF01E /* Assets.xcassets */; };
 		BF3DFF79279E9BBE00FAF01E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF3DFF78279E9BBE00FAF01E /* Preview Assets.xcassets */; };
+		BF3DFF80279EFFA600FAF01E /* whackAMoleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3DFF7F279EFFA600FAF01E /* whackAMoleModel.swift */; };
+		BF3DFF82279EFFBB00FAF01E /* whackAMoleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3DFF81279EFFBB00FAF01E /* whackAMoleViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +21,8 @@
 		BF3DFF73279E9BBC00FAF01E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		BF3DFF75279E9BBE00FAF01E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BF3DFF78279E9BBE00FAF01E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		BF3DFF7F279EFFA600FAF01E /* whackAMoleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = whackAMoleModel.swift; sourceTree = "<group>"; };
+		BF3DFF81279EFFBB00FAF01E /* whackAMoleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = whackAMoleViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +56,8 @@
 			isa = PBXGroup;
 			children = (
 				BF3DFF71279E9BBC00FAF01E /* WhackAMoleApp.swift */,
+				BF3DFF7F279EFFA600FAF01E /* whackAMoleModel.swift */,
+				BF3DFF81279EFFBB00FAF01E /* whackAMoleViewModel.swift */,
 				BF3DFF73279E9BBC00FAF01E /* ContentView.swift */,
 				BF3DFF75279E9BBE00FAF01E /* Assets.xcassets */,
 				BF3DFF77279E9BBE00FAF01E /* Preview Content */,
@@ -137,6 +143,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF3DFF82279EFFBB00FAF01E /* whackAMoleViewModel.swift in Sources */,
+				BF3DFF80279EFFA600FAF01E /* whackAMoleModel.swift in Sources */,
 				BF3DFF74279E9BBC00FAF01E /* ContentView.swift in Sources */,
 				BF3DFF72279E9BBC00FAF01E /* WhackAMoleApp.swift in Sources */,
 			);
