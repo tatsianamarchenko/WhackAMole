@@ -9,7 +9,9 @@ import SwiftUI
 
 struct ContentView: View {
   @ObservedObject var viewModel: WhackAMoleViewModel
-  @State var show = false
+  @State var text = 0
+  @State var start = false
+  @State var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
   var body: some View {
     ZStack {
       Rectangle()
@@ -22,18 +24,22 @@ struct ContentView: View {
             .fill(LinearGradient(gradient: Gradient(colors: [.mint,.blue]), startPoint: .topLeading, endPoint: .center)).opacity(0.2)
             .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
 
-          LazyVGrid(columns: [GridItem(.adaptive(minimum: 110))], content: {
+          LazyVGrid(columns: [GridItem((.adaptive(minimum: 110)))], content: {
             ForEach(viewModel.gameArray) {item in
-              GameElement(card: item)
+              GameElement(card: item, numberOfElement: item.id)
 
                 .onTapGesture {
-                  viewModel.changeScore(item)
+                  if start {
+                  if item.show {
+                    viewModel.changeScore(element: item)
+                  }
+                  }
                 }
             }
           })
         }.padding(.horizontal)
-        
-        Spacer(minLength: 50)
+          
+        Spacer(minLength: 30)
 
         ZStack{
           Rectangle()
@@ -41,14 +47,19 @@ struct ContentView: View {
             .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
           //        .ignoresSafeArea()
           VStack {
-            Text("Score: 1")
+            Text("Timer: \(viewModel.timer)")
+              .font(.title)
+              .fontWeight(.bold)
+              .foregroundColor(.white)
+              .padding()
+            Text("Score: \(viewModel.score)")
               .font(.title)
               .fontWeight(.semibold)
               .foregroundColor(.white)
               .padding()
             HStack {
               Button {
-              //
+                self.start = true
               } label: {
                 Image(systemName: "restart.circle.fill")
                   .resizable()
@@ -58,7 +69,7 @@ struct ContentView: View {
               }
 
               Button {
-                //
+                self.start.toggle()
               } label: {
                 Image(systemName: "pause.circle.fill")
                   .resizable()
@@ -69,7 +80,16 @@ struct ContentView: View {
             }.padding(10)
           }
         }
-        .frame(width: 300, height: 100, alignment: .center)
+        .frame(width: 300, height: 200, alignment: .center)
+      }.onReceive(self.timer) { (_) in
+        if self.text < 60 {
+          if self.start {
+            self.text += 1
+          }
+        } else {
+          self.start = false
+          self.text = 0
+        }
       }
     }
   }
@@ -79,6 +99,7 @@ struct GameElement: View {
   var width = CGFloat(80)
   var height = CGFloat(80)
   var card : WhackAMoleModel.SingleHole
+  var numberOfElement: Int
   var body: some View {
     let multiplier = width / 44
     let progress : Double = Double((100 - 90)) * 0.01
@@ -97,7 +118,6 @@ struct GameElement: View {
         .resizable()
         .frame(width: 90, height: 90)
         .aspectRatio(contentMode: .fill)
-        .shadow(color: .green, radius: 3, x: 3, y: 3)
         .padding(8)
         .offset(y: card.show ? -70 : 0).animation(.easeInOut, value: card.show)
     }.padding(.vertical, 3)
