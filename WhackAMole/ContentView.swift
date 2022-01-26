@@ -25,7 +25,7 @@ struct ContentView: View {
 
           LazyVGrid(columns: [GridItem((.adaptive(minimum: 110)))], content: {
             ForEach(viewModel.gameArray) {item in
-              GameElement(card: item, numberOfElement: item.id)
+              GameElement(hole: item, numberOfElement: item.id)
 
                 .onTapGesture {
                   if viewModel.start, self.start {
@@ -91,6 +91,7 @@ struct ContentView: View {
       }.onReceive(self.timer) { (_) in
         if self.start {
           viewModel.timerManager()
+        
           if viewModel.timer == 0 {
             self.start = false
           }
@@ -103,7 +104,7 @@ struct ContentView: View {
 struct GameElement: View {
   var width = CGFloat(80)
   var height = CGFloat(80)
-  var card : WhackAMoleModel.SingleHole
+  var hole : WhackAMoleModel.SingleHole
   var numberOfElement: Int
   var body: some View {
     let multiplier = width / 44
@@ -114,7 +115,7 @@ struct GameElement: View {
         .stroke(LinearGradient(gradient: Gradient(colors: [.gray.opacity(0.1), .black.opacity(0.3)]), startPoint: .leading, endPoint: .trailing), style: StrokeStyle(lineWidth: 3.5 * multiplier, lineJoin: .round))
 
       Circle()
-        .trim(from: card.show ? progress : 1, to: 1)
+        .trim(from: hole.show ? progress : 1, to: 1)
         .stroke(LinearGradient(gradient: Gradient(colors: [.indigo, .pink]), startPoint: .leading, endPoint: .trailing), style: StrokeStyle(lineWidth: 3.5 * multiplier, lineJoin: .round))
         .rotationEffect(Angle(degrees: 90))
         .rotation3DEffect(Angle(degrees: 180), axis: (x: 1, y: 0, z: 0))
@@ -124,7 +125,7 @@ struct GameElement: View {
         .frame(width: 90, height: 90)
         .aspectRatio(contentMode: .fill)
         .padding(8)
-        .offset(y: card.show ? -70 : 0).animation(.easeInOut, value: card.show)
+        .offset(y: hole.show ? -70 : 0).animation(.easeInOut, value: hole.show)
     }.padding(.vertical, 3)
       .rotation3DEffect(Angle(degrees: -300), axis: (x: 10, y: 0, z: 0),  perspective: 0.8)
       .frame(width: 100, height: 100)
