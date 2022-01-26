@@ -13,31 +13,36 @@ class WhackAMoleViewModel : ObservableObject {
    static func createMemoryGame() -> WhackAMoleModel {
      return WhackAMoleModel()
    }
-  
-  func newGame() {
+
+  func updateArray() {
     Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.update), userInfo: nil, repeats: false)
   }
-
   @objc func update() {
-    model.newGame()
+    model.updateArray()
   }
-
   func changeScore ( element: WhackAMoleModel.SingleHole) {
     model.scoreCount(element: element)
-newGame()
+    updateArray()
   }
-
-
+  func timerManager () {
+    model.timerManager()
+  }
+  func startGame () {
+    model.startGame()
+  }
+  func createNewGame () {
+    model.createNewGame()
+  }
   var gameArray: Array<WhackAMoleModel.SingleHole> {
     model.gameArray
   }
-
   var score: Int {
     model.score
   }
-
   var timer: Int {
     model.timer
   }
-
+  var start: Bool {
+    model.start
+  }
 }

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ContentView: View {
   @ObservedObject var viewModel: WhackAMoleViewModel
-  @State var text = 0
   @State var start = false
   @State var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
   var body: some View {
@@ -29,7 +28,7 @@ struct ContentView: View {
               GameElement(card: item, numberOfElement: item.id)
 
                 .onTapGesture {
-                  if start {
+                  if viewModel.start, self.start {
                   if item.show {
                     viewModel.changeScore(element: item)
                   }
@@ -45,7 +44,6 @@ struct ContentView: View {
           Rectangle()
             .fill(LinearGradient(gradient: Gradient(colors: [.mint,.blue]), startPoint: .topLeading, endPoint: .center)).opacity(0.2)
             .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-          //        .ignoresSafeArea()
           VStack {
             Text("Timer: \(viewModel.timer)")
               .font(.title)
@@ -59,21 +57,30 @@ struct ContentView: View {
               .padding()
             HStack {
               Button {
-                self.start = true
+                if !viewModel.start {
+                  viewModel.startGame()
+                  self.start = true
+                }
+                else {
+                  viewModel.createNewGame()
+                  self.start = false
+                }
               } label: {
                 Image(systemName: "restart.circle.fill")
                   .resizable()
-                  .foregroundColor(.pink)
+                  .foregroundColor(self.start ? .purple : .pink )
                   .frame(width: 80, height: 80, alignment: .leading)
                   .clipShape(Circle())
               }
 
               Button {
-                self.start.toggle()
+                if viewModel.start {
+                  self.start.toggle()
+                }
               } label: {
                 Image(systemName: "pause.circle.fill")
                   .resizable()
-                  .foregroundColor(.pink)
+                  .foregroundColor(self.start ? .purple : .pink)
                   .frame(width: 80, height: 80, alignment: .leading)
                   .clipShape(Circle())
               }
@@ -82,13 +89,11 @@ struct ContentView: View {
         }
         .frame(width: 300, height: 200, alignment: .center)
       }.onReceive(self.timer) { (_) in
-        if self.text < 60 {
-          if self.start {
-            self.text += 1
+        if self.start {
+          viewModel.timerManager()
+          if viewModel.timer == 0 {
+            self.start = false
           }
-        } else {
-          self.start = false
-          self.text = 0
         }
       }
     }

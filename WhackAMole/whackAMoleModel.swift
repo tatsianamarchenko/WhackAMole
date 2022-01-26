@@ -9,12 +9,32 @@ import Foundation
 struct WhackAMoleModel {
 
   var gameArray: Array<SingleHole>
-
   var score = 0
+  var start = false
+  var timer = 60
 
-  var timer = 0
+  mutating func createNewGame () {
+     score = 0
+     start = false
+     timer = 60
+  }
 
-  mutating func newGame () {
+  mutating func startGame () {
+    start = true
+  }
+
+  mutating func timerManager () {
+    if start {
+    timer -= 1
+      if self.timer == 0 {
+        start = false
+        timer = 60
+        score = 0
+      }
+    }
+  }
+
+  mutating func updateArray () {
     gameArray = Array<SingleHole>()
     for index in 0..<9 {
       let randon = Int.random(in: 0..<9)
